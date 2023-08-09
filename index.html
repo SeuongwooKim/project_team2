@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  <script>
+  $( function() {
+    $( "#accordion" ).accordion({
+      collapsible: true
+    });
+  } );
+  </script>
+<script>
+    //패스워드 확인용 자바스크립트 소스코딩
+    function passwordChk(){
+        var password01 = document.getElementById("password01").value;
+        var password02 = document.getElementById("password02").value;
+        // 만약에 password01 입력란에 6글자 미만으로 값이 입력된다면
+        if(password01.length < 6){
+            //alert()메서드의 메시지가 나타나게 하고, return false;처리를 종료합니다.
+            alert("비밀번호를 6글자 이상으로 입력해 주세요!");
+            return false;
+        }
+        // 만약에 password01 입력글자와 password02 입력글자가 다르다면
+        ///alert()메서드의 메시지를 나타나게 하고, return false; 처리를 종료합니다.
+        // 그렇지 않다면 else문으로 처리를 진행합니다.
+        if(password01 != password02){
+            alert("비밀번호가 일치하지 않습니다");
+            return false;
+        }else{
+            return true;
+        }
+    };
+
+
+
+    function sample6_execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if(data.userSelectedType === 'R'){
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if(data.buildingName !== '' && data.apartment === 'Y'){
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if(extraAddr !== ''){
+                        extraAddr = ' (' + extraAddr + ')';
+                    }
+                    // 조합된 참고항목을 해당 필드에 넣는다.
+                    document.getElementById("sample6_extraAddress").value = extraAddr;
+                
+                } else {
+                    document.getElementById("sample6_extraAddress").value = '';
+                }
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                document.getElementById('sample6_postcode').value = data.zonecode;
+                document.getElementById("sample6_address").value = addr;
+                // 커서를 상세주소 필드로 이동한다.
+                document.getElementById("sample6_detailAddress").focus();
+            }
+        }).open();
+    }
+    
+</script>
+</head>
+
+<body>
+    <div class="signup">
+        <form>
+            
+                <legend>
+                    <img class="logo" src="logo.png" alt="회원가입 로고">
+                   <br>
+                    회원가입
+                </legend>
+                <div class="signup-box">
+                    <label for="id">
+                        *아이디 <br> <input type="text" name="id" id="id" autocomplete="on" placeholder="아이디를 입력해주세요" required size="30"/>
+                    </label><br>
+                    
+                    *비밀번호<br><input type="password" name="password01" id="password01" placeholder="비밀번호를 입력해 주세요"size="30"
+                        required /> <br>
+                    *비밀번호 확인<br>
+                    <input type="password" name="password02" id="password02" placeholder="비밀번호를 다시 입력해주세요" size="30" required />
+                    <br>
+                    <label for="email">
+                        *이메일<br><input size="30" type="email" name="email" id="email" autocomplete="on" placeholder="이메일을 입력해 주세요!"
+                            required />
+                    </label><br>
+                    *이름<br><input size="30" type="text" name="name" id="name" placeholder="이름을 입력해 주세요" required />
+                </div>
+                <label for="birthDay">*생년월일</label>
+                <br>
+                <span>
+                    <input size="30" type="date" class="birthDay" name="birthDay" min="1900-01-01" max="2099-12-31" required/>
+
+                <div class="gender">
+                    <input type="radio" name="chk_gender" value="남자" />남자
+                    <input type="radio" name="chk_gender" value="여자" />여자
+                    
+                </div>
+                
+                <br>
+                <span>
+                    <b></b><br>
+                  
+                    <!-- 회원가입: Daum 다음 카카오 주소 API연동 소스(시작) -->
+                    *주소<br>
+                    <input type="text" id="sample6_postcode" placeholder="우편번호">
+                    <input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기"><br>
+                    <input type="text" id="sample6_address" placeholder="주소" size="37"><br>
+                    <input type="text" id="sample6_detailAddress" placeholder="상세주소" size="37">
+                    <input class="extraAddress" type="text" id="sample6_extraAddress" placeholder="참고항목" size="35">
+                    <br>
+                    *필수 입력사항<br>
+
+                    <br><br>[필수] 홈페이지 이용약관<br><br>
+                    <div class="aco">
+                    <div class="accordion accordion-flush" id="accordionFlushExample">
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="flush-headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                <label><input type="checkbox" required />   홈페이지 이용약관</label></button>
+                          </h2>
+                          <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body"><b>제1조(목적) 이 약관은 꾸꾸치즈(이하 "회사"라 한다.)가 운영하는 인터넷 홈페이지(이하"홈페이지라 한다.) 에서 제공하는 인터넷 관련 서비스(이하"서비스"라한다)를 이용함에 있어 홈페이지와 이용자의 권리</b><br> </div>
+                          </div>
+                        </div>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="flush-headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                <label><input type="checkbox" required />   개인정보 수집 및 이용 동의</label>
+                            </button>
+                          </h2>
+                          <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+                          </div>
+                        </div>
+                        <div class="accordion-item">
+                          <h2 class="accordion-header" id="flush-headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                <label><input type="checkbox" required />   통합 서비스 이용 약관</label>
+                            </button>
+                          </h2>
+                          <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#accordionFlushExample">
+                            <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+                      <br><br>
+                      [선택] 마케팅 활용 동의/철회
+                      <div class="aco">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="flush-headingFour">
+                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseFour" aria-expanded="false" aria-controls="flush-collapseFour">
+                            <label><input type="checkbox"/>   마케팅 활용 동의/철회</label>
+                          </button>
+                        </h2>
+                        <div id="flush-collapseFour"  class="accordion-collapse collapse" aria-labelledby="flush-headingFour" data-bs-parent="#accordionFlushExample">
+                          <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                        </div>
+                      </div>
+                    </div>
+                      <br><br>
+                    
+                    <input type="submit" value="가입하기" onclick="passwordChk()"/>
+                  
+                </span>
+              </div>
+           
+        </form>
+    </div>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+
+
+
+
+</body>
+
+</html>
